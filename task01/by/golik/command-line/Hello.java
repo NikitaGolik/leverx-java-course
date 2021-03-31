@@ -1,5 +1,5 @@
-/* Создать класс Hello, который будет приветствовать любого пользователя 
-*при вводе его имени через командную строку.
+/* Create a Hello class that will greet any user
+ * when entering its name via the command line.
 */
 
 import java.util.Scanner;
