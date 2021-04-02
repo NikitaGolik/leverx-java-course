@@ -40,9 +40,18 @@ public class Field {
             System.out.println();
         }
     }
+    public static void printFieldWithNumbersOfCells() {
+        System.out.println(
+                "|0|1|2|\n" +
+                "|3|4|5|\n" +
+                "|6|7|8|");
+    }
 
     public static ArrayList<Cell> getField() {
         return field;
+    }
+    public static int getFullFieldSize() {
+        return FULL_FIELD_SIZE;
     }
 
 }
