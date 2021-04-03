@@ -10,12 +10,13 @@ public class Field {
     /**
      * Length of raw and column
      */
-    private static int FIELD_SIZE = 3;
+    private static final int FIELD_SIZE = 3;
     /**
      * Size if field
      */
-    private static int FULL_FIELD_SIZE = FIELD_SIZE * FIELD_SIZE;
-    private static ArrayList<Cell> field = new ArrayList<>();
+    private static final int FULL_FIELD_SIZE = FIELD_SIZE * FIELD_SIZE;
+
+    private static final ArrayList<Cell> field = new ArrayList<>();
 
     /**
      * This method creates filed for game
@@ -32,8 +33,10 @@ public class Field {
      */
     public static void printField() {
         int cellListNumber = 0;
+
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
+
                 field.get(cellListNumber).printCell();
                 cellListNumber++;
             }
@@ -52,6 +55,11 @@ public class Field {
     }
     public static int getFullFieldSize() {
         return FULL_FIELD_SIZE;
+    }
+    public static void clean(){
+        for (int i = 0; i < FULL_FIELD_SIZE; i++) {
+            field.get(i).setCellFigure(Figure.EMPTY);
+        }
     }
 
 }

@@ -23,9 +23,6 @@ public class Cell {
         this.cellNumber = cellNumber;
     }
 
-    public int getCellNumber() {
-        return cellNumber;
-    }
 
     public Figure getCellFigure() {
         return cellFigure;
@@ -39,6 +36,6 @@ public class Cell {
      * This method shows on console figure that is in cell
      */
     public void printCell() {
-        System.out.println("|" + cellFigure + "|");
+        System.out.print("|" + cellFigure + "|");
     }
 }

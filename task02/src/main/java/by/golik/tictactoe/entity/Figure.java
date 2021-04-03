@@ -11,7 +11,7 @@ public enum Figure {
     },
     O {
         public String toString() {
-            return "Y";
+            return "O";
         }
     },
     EMPTY {
