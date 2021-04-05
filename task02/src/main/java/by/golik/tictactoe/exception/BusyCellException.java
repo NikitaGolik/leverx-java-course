@@ -3,10 +3,10 @@ package by.golik.tictactoe.exception;
 /**
  * @author Nikita Golik
  */
-public class FieldOutOfBoundsException extends Exception {
+public class BusyCellException extends Exception {
 
     @Override
     public String getMessage() {
-        return "";
+        return "Cell is busy. Try another moves";
     }
 }

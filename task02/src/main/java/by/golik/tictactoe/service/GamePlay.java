@@ -3,8 +3,10 @@ package by.golik.tictactoe.service;
 import by.golik.tictactoe.entity.Field;
 import by.golik.tictactoe.entity.Figure;
 import by.golik.tictactoe.entity.Player;
+import by.golik.tictactoe.exception.BusyCellException;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -14,6 +16,8 @@ public class GamePlay {
 
     private static final Player[] players = new Player[2];
     private static final int FULL_FIELD_SIZE = Field.getFullFieldSize();
+
+    private static Random rand = new Random();
 
     /**
      * This method creates 2 players for game
@@ -33,6 +37,10 @@ public class GamePlay {
      */
     public static void start() {
         gaming();
+    }
+
+    public static void startComputer() {
+        gamingWithComputer();
     }
 
     /**
@@ -68,7 +76,7 @@ public class GamePlay {
             checkingCellEmpty(playerMove);
             addFigureOnField(playerMove, figureOfPlayer);
             return true;
-        } catch (Exception e) {
+        } catch (BusyCellException e) {
             System.out.println(e.getMessage());
             return false;
         }
@@ -116,16 +124,36 @@ public class GamePlay {
         return playerTurn;
     }
 
+    private static int getComputerTurn() throws Exception {
+        int computerTurn = -1;
+        boolean isValidTurn;
+        do {
+            try {
+                computerTurn = rand.nextInt(FULL_FIELD_SIZE);
+                isValidTurn = true;
+            } catch (Exception e) {
+                System.out.println("Wrong format! Your turn should be from 0 to 8");
+                isValidTurn = false;
+            }
+        } while (!isValidTurn);
+        if (!(computerTurn == 0 | computerTurn == 1 | computerTurn == 2
+                |computerTurn == 3 | computerTurn == 4 | computerTurn == 5
+                |computerTurn == 6 | computerTurn == 7 | computerTurn == 8)) {
+            throw new Exception();
+        }
+        return computerTurn;
+    }
+
     /**
      * This method checks if chosen Cell is empty,
      * @param cellNumb - number of cell from table
-     * @throws Exception - if cell is busy
+     * @throws BusyCellException - if cell is busy
      */
     //  метод проверка "занятости" ячейки
-    private static void checkingCellEmpty(int cellNumb) throws Exception {
+    private static void checkingCellEmpty(int cellNumb) throws BusyCellException {
 
         if (!Field.getField().get(cellNumb).getCellFigure().equals(Figure.EMPTY)) {
-            throw new Exception();
+            throw new BusyCellException();
         }
     }
 
@@ -139,6 +167,22 @@ public class GamePlay {
         do {
             try {
                 playerTurn = getPlayerTurn();
+                isValidTurn = true;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                isValidTurn = false;
+            }
+        } while (!isValidTurn);
+
+        return playerTurn;
+    }
+
+    private static int getCheckedComputerTurn() {
+        boolean isValidTurn;
+        int playerTurn = -1;
+        do {
+            try {
+                playerTurn = getComputerTurn();
                 isValidTurn = true;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -179,11 +223,38 @@ public class GamePlay {
 
     }
 
+    public static void gamingWithComputer() {
+        boolean isHaveWinner;
+        boolean isFigureAdded;
+        int moveCounter = 0;
+        Figure playerFigure = Figure.O;
+
+//        1. Receive X or O from turn of moves;
+//        2. Get move from player;
+//        3. Add player move on board;
+//        4. check for win after 5 moves;
+//        5. check for draw;
+
+        Field.printFieldWithNumbersOfCells();
+        do{
+            playerFigure = receiveFigureFromTurn(playerFigure);
+            do {
+                int playerTurn = getCheckedComputerTurn();
+                isFigureAdded = addPlayerMoveOnField(playerTurn, playerFigure);
+            } while (!isFigureAdded);
+            Field.printField();
+            moveCounter++;
+            isHaveWinner = checkWinner(moveCounter, playerFigure);
+            isHaveWinner = checkDraw(moveCounter, isHaveWinner);
+        } while (!isHaveWinner);
+
+    }
+
     /**
-     * This method
-     * @param moveCounter
-     * @param isHaveWinner
-     * @return
+     * This method checks the game for a draw
+     * @param moveCounter - available steps
+     * @param isHaveWinner - boolean, if have a winner
+     * @return result of checking for a draw
      */
     private static boolean checkDraw(int moveCounter, boolean isHaveWinner) {
         if (!isHaveWinner & moveCounter == 9) {
@@ -194,10 +265,10 @@ public class GamePlay {
     }
 
     /**
-     *
-     * @param moveCounter
-     * @param figure
-     * @return
+     * This method checks the game for a winner
+     * @param moveCounter - available steps
+     * @param figure - 'X' or 'O'
+     * @return result of checking a winner
      */
     public static boolean checkWinner(int moveCounter, Figure figure) {
         //        5 - min moves for check winner
@@ -209,14 +280,15 @@ public class GamePlay {
     }
 
     /**
-     * This method checks combinations
+     * This method checks combinations for a victory
      * @return if combination wins
      */
     private static boolean checkWinnerCombination() {
         boolean isHaveWinner = false;
 
 //      выйгрышные комбинации
-        int[][] winVar = {{0, 1, 2}, {0, 3, 6}, {0, 4, 8}, {1, 4, 7}, {2, 4, 6}, {2, 5, 8}, {3, 4, 5}, {6, 7, 8}};
+        int[][] winVar = {{0, 1, 2}, {0, 3, 6}, {0, 4, 8}, {1, 4, 7},
+                          {2, 4, 6}, {2, 5, 8}, {3, 4, 5}, {6, 7, 8}};
 
         ArrayList<Figure> figureList = new ArrayList<>();
 
@@ -241,9 +313,9 @@ public class GamePlay {
 
     /**
      * This method checks if combination of player is winning
-     * @param fCell
-     * @param sCell
-     * @param tCell
+     * @param fCell - first cell
+     * @param sCell - second cell
+     * @param tCell -
      * @param figureList
      * @return
      */

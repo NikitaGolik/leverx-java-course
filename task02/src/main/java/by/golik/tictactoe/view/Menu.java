@@ -18,8 +18,9 @@ public class Menu {
 
     private static void printMenu() {
 
-        System.out.println("1 - start\n" +
-                           "2 - Exit");
+        System.out.println("1 - start with human\n" +
+                           "2 - start with computer\n" +
+                           "3 - Exit");
     }
 
     private static void showMainMenu() {
@@ -36,8 +37,11 @@ public class Menu {
             case 1:
                 GamePlay.start();
                 return false;
-
             case 2:
+                GamePlay.startComputer();
+                return false;
+
+            case 3:
                 return false;
 
             default:
