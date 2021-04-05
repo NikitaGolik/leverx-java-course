@@ -7,6 +7,6 @@ public class FieldOutOfBoundsException extends Exception {
 
     @Override
     public String getMessage() {
-        return "";
+        return "Change";
     }
 }

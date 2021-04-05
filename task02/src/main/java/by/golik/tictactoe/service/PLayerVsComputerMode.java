@@ -1,9 +1,11 @@
 package by.golik.tictactoe.service;
 
+import by.golik.tictactoe.exception.FieldOutOfBoundsException;
+
 import java.util.Random;
 
 import static by.golik.tictactoe.entity.Field.*;
-import static by.golik.tictactoe.service.PvPMode.userShot;
+import static by.golik.tictactoe.service.PvPMode.userTurn;
 import static by.golik.tictactoe.service.Util.checkWin;
 import static by.golik.tictactoe.service.Util.isCellBusy;
 
@@ -12,77 +14,58 @@ import static by.golik.tictactoe.service.Util.isCellBusy;
  */
 public class PLayerVsComputerMode {
 
-    public static void aiShot() {
+    public static void computerTurn() {
         int x = -1;
         int y = -1;
         boolean ai_win = false;
         boolean user_win = false;
         // Находим выигрышный ход
-        if (aiLevel == 2) {
-            for (int i = 0; i < DIMENSION; i++) {
-                for (int j = 0; j < DIMENSION; j++) {
+
+        // Блокировка хода пользователя, если он побеждает на следующем ходу
+            for (int i = 0; i < Size; i++) {
+                for (int j = 0; j < Size; j++) {
                     if (!isCellBusy(i, j)) {
-                        field[i][j] = AI_SIGN;
-                        if (checkWin(AI_SIGN)) {
+                        field[i][j] = FIRST_USER_FIGURE;
+                        if (checkWin(FIRST_USER_FIGURE)) {
                             x = i;
                             y = j;
-                            ai_win = true;
+                            user_win = true;
                         }
-                        field[i][j] = NOT_SIGN;
+                        field[i][j] = NOT_BUSY;
                     }
                 }
             }
-        }
-        // Блокировка хода пользователя, если он побеждает на следующем ходу
-        if (aiLevel > 0) {
-            if (!ai_win) {
-                for (int i = 0; i < DIMENSION; i++) {
-                    for (int j = 0; j < DIMENSION; j++) {
-                        if (!isCellBusy(i, j)) {
-                            field[i][j] = USER_SIGN;
-                            if (checkWin(USER_SIGN)) {
-                                x = i;
-                                y = j;
-                                user_win = true;
-                            }
-                            field[i][j] = NOT_SIGN;
-                        }
-                    }
-                }
-            }
-        }
-        if (!ai_win && !user_win) {
+        if (!user_win) {
             do {
                 Random rnd = new Random();
-                x = rnd.nextInt(DIMENSION);
-                y = rnd.nextInt(DIMENSION);
+                x = rnd.nextInt(Size);
+                y = rnd.nextInt(Size);
             }
             while (isCellBusy(x, y));
         }
-        field[x][y] = AI_SIGN;
-        System.out.println("x = " + x + "| y = " + y + "| ai_win = " + ai_win + "| user_win = " + user_win);
+        field[x][y] = COMPUTER_FIGURE;
     }
 
-    public static void modeAgainstAI() {
+    public static void modeAgainstComputer() throws FieldOutOfBoundsException {
         int count = 0;
         initField();
         while (true) {
             printField();
-            userShot(USER_SIGN, 0);
+            userTurn(FIRST_USER_FIGURE, 0);
             count++;
-            if (checkWin(USER_SIGN)) {
-                System.out.println("USER WIN!!!");
+            if (checkWin(FIRST_USER_FIGURE)) {
+                System.out.println("Player win!");
                 printField();
                 break;
             }
-            aiShot();
+            computerTurn();
             count++;
-            if (checkWin(AI_SIGN)) {
-                System.out.println("AI WIN!!!");
+            if (checkWin(COMPUTER_FIGURE)) {
+                System.out.println("Computer WIN!");
                 printField();
                 break;
             }
-            if (count == Math.pow(DIMENSION, 2)) {
+            if (count == Math.pow(Size, 2)) {
                 printField();
                 break;
             }
