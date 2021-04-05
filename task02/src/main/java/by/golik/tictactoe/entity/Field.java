@@ -1,65 +1,37 @@
 package by.golik.tictactoe.entity;
 
-import java.util.ArrayList;
-
 /**
- * This class represents field for TicTacToe
  * @author Nikita Golik
  */
 public class Field {
-    /**
-     * Length of raw and column
-     */
-    private static final int FIELD_SIZE = 3;
-    /**
-     * Size if field
-     */
-    private static final int FULL_FIELD_SIZE = FIELD_SIZE * FIELD_SIZE;
 
-    private static final ArrayList<Cell> field = new ArrayList<>();
+    public static final String USER_SIGN = "X";
+    public static final String USER_SIGN_SECOND = "O";
+    public static final String AI_SIGN = "O";
+    public static final String NOT_SIGN = "*";
+    public static int aiLevel = 0;
+    public static final int DIMENSION = 3;
+    public static String[][] field = new String[DIMENSION][DIMENSION];
 
-    /**
-     * This method creates filed for game
-     */
-    public static void createField() {
-        for (int i = 0; i < FULL_FIELD_SIZE; i++) {
-            Cell cell = new Cell(i);
-            field.add(cell);
+    public static void initField() {
+        for (int i = 0; i < DIMENSION; i++) {
+            for (int j = 0; j < DIMENSION; j++) {
+                field[i][j] = NOT_SIGN;
+            }
         }
     }
 
-    /**
-     * This method shows on console full field
-     */
     public static void printField() {
-        int cellListNumber = 0;
-
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
-
-                field.get(cellListNumber).printCell();
-                cellListNumber++;
+        for (int i = 0; i <= DIMENSION; i++) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < DIMENSION; i++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < DIMENSION; j++) {
+                System.out.print(field[i][j] + " ");
             }
             System.out.println();
         }
     }
-    public static void printFieldWithNumbersOfCells() {
-        System.out.println(
-                "|0|1|2|\n" +
-                "|3|4|5|\n" +
-                "|6|7|8|");
-    }
-
-    public static ArrayList<Cell> getField() {
-        return field;
-    }
-    public static int getFullFieldSize() {
-        return FULL_FIELD_SIZE;
-    }
-    public static void clean(){
-        for (int i = 0; i < FULL_FIELD_SIZE; i++) {
-            field.get(i).setCellFigure(Figure.EMPTY);
-        }
-    }
-
 }
