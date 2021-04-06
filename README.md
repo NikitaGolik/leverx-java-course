@@ -5,3 +5,6 @@ Here you can see:
 starting the program from the command line.
 - And how to Create an archive (jar file) which can be run with the java -jar <archive name> command.The "report jar"
  file contains detailed instructions for starting the program from the command line.
+ ## task02 - console application "TicTacToe"
+ - Game mode Player against another player
+ - Game mode Player against Computer
