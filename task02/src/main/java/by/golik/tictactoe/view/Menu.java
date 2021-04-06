@@ -10,6 +10,9 @@ import static by.golik.tictactoe.service.PvPMode.modePlayerVsPlayer;
  */
 public class Menu {
 
+    /**
+     * Method, which shows dialog with user on console.
+     */
     public static void mainMenu() {
         System.out.println("Choose mode of game: ");
         System.out.println("1 - Play against computer");
