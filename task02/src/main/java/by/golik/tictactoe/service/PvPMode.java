@@ -1,67 +1,66 @@
 package by.golik.tictactoe.service;
 
-import by.golik.tictactoe.exception.FieldOutOfBoundsException;
-
 import java.util.Scanner;
-
 import static by.golik.tictactoe.entity.Field.*;
 import static by.golik.tictactoe.service.Util.*;
 
 /**
- * This class describes gaming process in Player vs Player mode
+ * This class describes gaming process in Player vs Player mode.
  * @author Nikita Golik
  */
 public class PvPMode {
 
     /**
-     * This method
-     * @param figure - figure of player
-     * @param i - number of player
+     * This method do valid step of player.
+     * @param figure - figure of player.
+     * @param numberOfPlayer - number of player.
      */
-    public static void userTurn(String figure, int i) {
-        boolean validPlayerMove;
-        int x = -1;
-        int y = -1;
+    protected static void userTurn(String figure, int numberOfPlayer) {
+
+        int coordinateX = -1;
+        int coordinateY = -1;
         do {
-            if (i == 0) {
-                System.out.println("Enter x y (1 - " + Size + "): ");
+            if (numberOfPlayer == 0) {
+                System.out.println("Enter coordinateX and coordinateY of your turn:");
             } else {
-                System.out.println("Player " + i + ", do move x y (1 - " + Size + "): ");
+                System.out.println("Player " + numberOfPlayer + ", enter coordinateX and coordinateY of your turn:");
             }
             Scanner sc = new Scanner(System.in);
 
-                x = sc.nextInt() - 1;
-                y = sc.nextInt() - 1;
+                coordinateX = sc.nextInt() - 1;
+                coordinateY = sc.nextInt() - 1;
 
-        } while  (isCellBusy(x, y));
-                field[x][y] = figure;
+        } while  (isCellBusy(coordinateX, coordinateY));
+            if(coordinateX > field.length - 1 || coordinateY > field.length - 1) {
+                userTurn(figure, numberOfPlayer);
+            } else {
+                field[coordinateX][coordinateY] = figure;
+            }
     }
 
     /**
-     *
-     * @throws FieldOutOfBoundsException
+     * This method take information about who is winner. Game is over, if winner is defined.
      */
-    public static void modeTwoPlayers() throws FieldOutOfBoundsException {
-        int count = 0;
+    public static void modePlayerVsPlayer() {
         initField();
         while (true) {
-            printField();
+            showField();
             userTurn(FIRST_USER_FIGURE, 1);
-            count++;
             if (checkWin(FIRST_USER_FIGURE)) {
                 System.out.println("Player1 win");
-                printField();
+                showField();
                 break;
             }
+            if (isFieldFull()) {
+                System.out.println("Draw!");
+                showField();
+                break;
+            }
+            showField();
             userTurn(SECOND_USER_FIGURE, 2);
-            count++;
             if (checkWin(SECOND_USER_FIGURE)) {
                 System.out.println("Player2 win!");
-                printField();
-                break;
-            }
-            if (count == Math.pow(Size, 2)) {
-                printField();
+                showField();
                 break;
             }
         }

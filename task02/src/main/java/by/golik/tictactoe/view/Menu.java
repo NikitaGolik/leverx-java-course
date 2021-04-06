@@ -1,33 +1,30 @@
 package by.golik.tictactoe.view;
 
-import by.golik.tictactoe.exception.FieldOutOfBoundsException;
-
 import java.util.Scanner;
-
-import static by.golik.tictactoe.service.PLayerVsComputerMode.modeAgainstComputer;
-import static by.golik.tictactoe.service.PvPMode.modeTwoPlayers;
+import static by.golik.tictactoe.service.PLayerVsComputerMode.modeComputerVsPlayer;
+import static by.golik.tictactoe.service.PvPMode.modePlayerVsPlayer;
 
 /**
- * Class shows menu of game
+ * Class shows menu of game.
  * @author Nikita Golik
  */
 public class Menu {
 
-    public static void mainMenu() throws FieldOutOfBoundsException {
+    public static void mainMenu() {
         System.out.println("Choose mode of game: ");
         System.out.println("1 - Play against computer");
-        System.out.println("2 - Player vs Player");
+        System.out.println("2 - Player against Player");
         System.out.println("3 - Exit");
-        int i = 0;
+        int meniItem = 0;
         Scanner sc = new Scanner(System.in);
-        i = sc.nextInt();
-        switch (i) {
+        meniItem = sc.nextInt();
+        switch (meniItem) {
             case 1: {
-                modeAgainstComputer();;
+                modeComputerVsPlayer();;
                 break;
             }
             case 2: {
-                modeTwoPlayers();
+                modePlayerVsPlayer();
                 break;
             }
             case 3: {
@@ -35,7 +32,8 @@ public class Menu {
                 break;
             }
             default: {
-                System.out.println("Unexpected value");
+                System.out.println("Choose one of given variants of menu!");
+                mainMenu();
             }
         }
     }
